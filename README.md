@@ -4,7 +4,7 @@
 [![Developer](https://img.shields.io/badge/Developer-Hsini%20Mohamed-green.svg)](https://hsini.dev)
 
 > **Project ID**: `001`  
-> **Repository**: [https://github.com/hsinidev/001-OmniConvert-Video-Audio](https://github.com/hsinidev/001-OmniConvert-Video-Audio)
+> **Repository**: [https://github.com/hsinidev/OmniConvert-Video-Audio](https://github.com/hsinidev/OmniConvert-Video-Audio)
 
 ---
 
@@ -38,10 +38,10 @@ OmniConvert is an enterprise-grade multimedia transcoder engine designed for hig
 ### Setup Instructions
 ```bash
 # 1. Clone the repository
-git clone https://github.com/hsinidev/001-OmniConvert-Video-Audio.git
+git clone https://github.com/hsinidev/OmniConvert-Video-Audio.git
 
 # 2. Navigate to project directory
-cd 001-OmniConvert-Video-Audio
+cd OmniConvert-Video-Audio
 
 # 3. Install required dependencies
 pip install -r requirements.txt
@@ -59,7 +59,7 @@ python app.py
 - **Website**: [https://hsini.dev](https://hsini.dev)
 - **Email**: [contact@hsini.dev](mailto:contact@hsini.dev)
 - **GitHub Profile**: [https://github.com/hsinidev](https://github.com/hsinidev)
-- **Project Repo**: [https://github.com/hsinidev/001-OmniConvert-Video-Audio](https://github.com/hsinidev/001-OmniConvert-Video-Audio)
+- **Project Repo**: [https://github.com/hsinidev/OmniConvert-Video-Audio](https://github.com/hsinidev/OmniConvert-Video-Audio)
 
 ---
 
