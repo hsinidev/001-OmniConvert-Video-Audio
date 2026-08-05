@@ -1,0 +1,89 @@
+{
+  "project_id": 1,
+  "title": "OmniConvert Video & Audio",
+  "folder_name": "001-OmniConvert-Video-Audio",
+  "category": "Media Engine & File Converters",
+  "target_os": "Windows 10 / Windows 11 (x64 Native Executable / PyInstaller .exe)",
+  "version": "1.0.0-PROD",
+  "overview": "A production-grade, high-performance desktop media conversion application engineered with CustomTkinter and powered by an embedded FFmpeg engine. Capable of batch processing audio and video files into MP4, MKV, AVI, MP3, FLAC, and WAV formats with hardware acceleration, CRF control, custom scaling, real-time stderr telemetry parsing, and process lifecycle management.",
+  "key_features": [
+    "Native drag-and-drop batch file queue with reordering and individual item status tracking",
+    "Hardware acceleration auto-probe engine (NVIDIA NVENC, AMD AMF, Intel QSV)",
+    "Granular encoding controls (CRF sliders 18–28, preset toggles, custom resolution scaling, frame rate overrides)",
+    "Asynchronous FFmpeg stderr output parsing via regex for real-time progress meters, FPS, ETA, and speed metrics",
+    "Robust binary auto-resolution hierarchy (PyInstaller MEIPASS, local directory, system PATH)",
+    "Clean process termination logic supporting task-kill process groups on job cancellation",
+    "Dark / Light modern UI themes with live status console log and file detail inspector"
+  ],
+  "core_stack": {
+    "python_version": "3.10+",
+    "gui_framework": "CustomTkinter >= 5.2.0",
+    "drag_and_drop": "TkinterDnD2 / tkinterdnd2-universal",
+    "concurrency": "threading.Thread, queue.Queue, subprocess.Popen",
+    "packaging": "PyInstaller 6.0+ (Standalone .exe)",
+    "media_engine": "FFmpeg / FFprobe Static Executables (Build 6.0+)"
+  },
+  "architecture": {
+    "pattern": "Model-View-Controller (MVC) with Asynchronous Thread-Safe Event Queue",
+    "ui_thread": "CustomTkinter main loop polling queue.Queue every 40ms for 60 FPS UI responsiveness",
+    "worker_threads": "Background Python threads executing non-blocking stream & engine tasks",
+    "process_safety": "Thread-safe event queue passing, clean process tree termination, and memory safety"
+  },
+  "binary_resolution_order": [
+    "sys._MEIPASS (PyInstaller runtime bundle root)",
+    "Application root directory / 'bin' folder",
+    "System environment PATH",
+    "Fallback prompt asking user to select manual ffmpeg.exe path"
+  ],
+  "ffmpeg_parsing_rules": {
+    "duration_regex": "Duration:\\s*(\\d{2}):(\\d{2}):(\\d{2})\\.(\\d{2})",
+    "progress_regex": "time=(\\d{2}):(\\d{2}):(\\d{2})\\.(\\d{2})",
+    "speed_regex": "speed=\\s*([0-9\\.]+)x",
+    "fps_regex": "fps=\\s*([0-9\\.]+)"
+  },
+  "hardware_acceleration_matrix": {
+    "nvidia": {
+      "codec_h264": "h264_nvenc",
+      "codec_hevc": "hevc_nvenc",
+      "probe_cmd": "ffmpeg -hide_banner -encoders | findstr nvenc"
+    },
+    "amd": {
+      "codec_h264": "h264_amf",
+      "codec_hevc": "hevc_amf",
+      "probe_cmd": "ffmpeg -hide_banner -encoders | findstr amf"
+    },
+    "intel": {
+      "codec_h264": "h264_qsv",
+      "codec_hevc": "hevc_qsv",
+      "probe_cmd": "ffmpeg -hide_banner -encoders | findstr qsv"
+    },
+    "cpu_fallback": {
+      "codec_h264": "libx264",
+      "codec_hevc": "libx265",
+      "codec_vp9": "libvpx-vp9"
+    }
+  },
+  "packaging_spec": {
+    "entry_point": "main.py",
+    "output_binary_name": "OmniConvertVideoAudio.exe",
+    "bundle_mode": "onedir / standalone exe",
+    "binaries_to_include": [
+      [
+        "bin/ffmpeg.exe",
+        "."
+      ],
+      [
+        "bin/ffprobe.exe",
+        "."
+      ]
+    ],
+    "hidden_imports": [
+      "customtkinter",
+      "tkinterdnd2",
+      "PIL",
+      "queue",
+      "concurrent.futures"
+    ]
+  },
+  "ai_agent_prompt": "You are an elite Senior Python Systems & Desktop UI Engineer tasked with implementing a production-grade native Windows desktop application titled 'OmniConvert Video & Audio'.\n\n### PROJECT OBJECTIVE:\nBuild a highly stable, beautiful, and fully self-contained multi-format media converter frontend using CustomTkinter and an embedded FFmpeg binary pipeline.\n\n### MANDATORY TECHNICAL REQUIREMENTS:\n1. ARCHITECTURE & THREADING:\n   - Never block the UI thread during probe or conversion operations.\n   - Implement an event-driven task queue (queue.Queue) to pass status, progress percentage, current time, total duration, speed, and log output from background threads to the CustomTkinter UI.\n   - Ensure proper subprocess handling using subprocess.Popen with creationflags=subprocess.CREATE_NO_WINDOW on Windows.\n   - Implement thread-safe cancellation that terminates child FFmpeg processes cleanly without orphan process leaks.\n\n2. BINARY RESOLUTION ENGINE:\n   - Construct a BinaryResolver class that dynamically locates ffmpeg.exe and ffprobe.exe by checking:\n     a) sys._MEIPASS (PyInstaller frozen path)\n     b) The executable/script working directory\n     c) ./bin/ subfolder\n     d) System PATH via shutil.which.\n   - If binaries are missing, show a user-friendly error dialog with instructions.\n\n3. MEDIA PROBING & PARSING:\n   - Before conversion, run ffprobe in JSON output mode (-v quiet -print_format json -show_format -show_streams) to extract stream duration, codecs, frame rate, resolution, and audio sample rate.\n   - During conversion, read FFmpeg stderr line-by-line using continuous regex matching to update UI progress bars, current timestamp, remaining time, conversion speed (e.g., 2.5x), and encoding FPS.\n\n4. HARDWARE ACCELERATION PROBER:\n   - On app startup, run a quick background probe against FFmpeg to test encoder support for h264_nvenc, h264_amf, and h264_qsv.\n   - Dynamically populate the UI Hardware Acceleration dropdown with available options (NVIDIA NVENC, AMD AMF, Intel QuickSync, CPU Software).\n\n5. USER INTERFACE & EXPERIENCE:\n   - Modern UI designed with CustomTkinter (Dark Mode by default with Light Mode toggle).\n   - Features include:\n     - File Queue View: Drag-and-drop zone using TkinterDnD2 with item status (Pending, Converting, Done, Error) and individual progress bars.\n     - Encoding Controls: Output format selection (MP4, MKV, AVI, MP3, FLAC, WAV), CRF slider (18-28 for video quality), preset dropdown (ultrafast to veryslow), custom resolution scaler (Original, 1080p, 720p, 4K), audio bitrate selector.\n     - Global Progress Bar & Overall Batch Stats.\n     - Collapsible Real-Time Console Log view displaying raw FFmpeg telemetry and warning messages.\n\n6. ERROR RESILIENCE & EDGE CASES:\n   - Wrap all file system operations and process executions in comprehensive try-except blocks.\n   - Gracefully handle corrupted media files, missing destination write permissions, and unexpected FFmpeg non-zero exit codes.\n   - Output detailed error messages into the application console log.\n\n7. DISTRIBUTION READY:\n   - Provide a complete OmniConvert.spec file for PyInstaller packaging that bundles assets, binaries, icon files, and necessary hidden imports into a standalone executable."
+}
